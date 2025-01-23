@@ -47,7 +47,7 @@ blueprint:
           integration: mobile_app
 
 
-target_variables:
+variables:
   current_temperature: !input current_temperature_sensor
   target_temperature: !input target_temperature_sensor
 
