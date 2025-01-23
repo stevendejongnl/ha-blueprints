@@ -48,15 +48,14 @@ blueprint:
 
 
 variables:
-  current_temperature: !input current_temperature_sensor
-  target_temperature: !input target_temperature_sensor
+  trigger_template: >-
+    {{ states(!input current_temperature_sensor) | float(0) >
+    states(!input target_temperature_sensor) | float(0) }}
 
 
 triggers:
   - platform: template
-    value_template: >-
-      {{ states(current_temperature) | float >
-      states(target_temperature) | float }}
+    value_template: !input trigger_template
     for: !input time
 
 
