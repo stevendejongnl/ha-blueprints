@@ -1,0 +1,69 @@
+blueprint:
+  name: Turn off heating after reaching target
+  description: >-
+    Turn off the heating device if the temperature remains above the target
+    temperature for a specified amount of time.
+  domain: automation
+
+
+  input:
+    trv_entity:
+      name: TRV Entity
+      description: The entity ID of the TRV device.
+      selector:
+        entity:
+          domain: climate
+
+    current_temperature_sensor:
+      name: Temperature Sensor
+      description: The entity ID of the temperature sensor.
+      selector:
+        entity:
+          domain: sensor
+
+    target_temperature_sensor:
+      name: Target Temperature Sensor
+      description: The entity ID of the target temperature sensor.
+      selector:
+        entity:
+          domain: sensor
+
+    time:
+      name: Time
+      description: The amount of time the temperature must remain above the target temperature before the heating device is turned off.
+      default: '1:00:00'
+      selector:
+        time: {}
+
+    notify:
+      name: Notify
+      description: The notification service to use.
+      selector:
+        entity:
+          domain: notify
+
+
+target_variables:
+  current_temperature: !input current_temperature_sensor
+  target_temperature: !input target_temperature_sensor
+
+
+triggers:
+  - platform: template
+    value_template: >-
+      {{ states(current_temperature) | float >
+      states(target_temperature) | float }}
+    for: !input time
+
+
+actions:
+  - data:
+      title: "{{ state_attr(trv_entity, 'friendly_name') }}"
+      message: "The temperature has been above the target for {{ !input time }}. The climate device has been turned off."
+    action: !input notify 
+  - target:
+      entity_id: !input trv_entity
+      action: climate.turn_off
+    data: {}
+mode: single
+
