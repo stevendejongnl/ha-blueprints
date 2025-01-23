@@ -31,9 +31,13 @@ blueprint:
     time:
       name: Time
       description: The amount of time the temperature must remain above the target temperature before the heating device is turned off.
-      default: '1:00:00'
+      default:
+        hours: 1
+        minutes: 0
+        seconds: 0
       selector:
-        time: {}
+        duration:
+          enable_day: false
 
     notify:
       name: Notify
