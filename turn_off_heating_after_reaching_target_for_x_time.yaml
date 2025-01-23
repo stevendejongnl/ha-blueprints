@@ -39,8 +39,8 @@ blueprint:
       name: Notify
       description: The notification service to use.
       selector:
-        action: {}
-        integration: notify
+        device:
+          integration: mobile_app
 
 
 target_variables:
