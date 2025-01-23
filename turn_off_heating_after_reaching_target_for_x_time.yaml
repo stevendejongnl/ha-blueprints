@@ -39,8 +39,8 @@ blueprint:
       name: Notify
       description: The notification service to use.
       selector:
-        entity:
-          domain: notify
+        action: {}
+        integration: notify
 
 
 target_variables:
@@ -60,7 +60,7 @@ actions:
   - data:
       title: "{{ state_attr(trv_entity, 'friendly_name') }}"
       message: "The temperature has been above the target for {{ !input time }}. The climate device has been turned off."
-    action: !input notify 
+    action: !input notify
   - target:
       entity_id: !input trv_entity
       action: climate.turn_off
